@@ -1,4 +1,10 @@
 {
-	"blue": -2,
-	"red" : 2
+  "rainbow": 5,
+  "unicorn": 3,
+  "dooom": -3,
+  "gloom": -2,
+  "fluffy": 4,
+  "pega": 123,
+  "larga": -8,
+  "add": 1
 }
