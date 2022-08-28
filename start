@@ -1,0 +1,15 @@
+#!/bin/bash
+export TMPDIR=/home/vk/apps/nodulo/tmp
+mkdir -p /home/vk/apps/nodulo/tmp
+PIDFILE="/home/vk/apps/nodulo/tmp/node.pid"
+NODE=/home/vk/apps/nodulo/node/bin/node
+
+if [ -e "$PIDFILE" ] && (pgrep -u vk | grep -x -f $PIDFILE &> /dev/null); then
+  echo "Node.js for nodulo already running."
+  exit 99
+fi
+
+cd /home/vk/apps/nodulo
+/usr/sbin/daemonize -c /home/vk/apps/nodulo -e ~/logs/apps/nodulo/node_error.log -o ~/logs/apps/nodulo/node_output.log -p $PIDFILE $NODE nodulo.js
+
+echo "Started Node.js for nodulo."
