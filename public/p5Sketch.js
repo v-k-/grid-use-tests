@@ -1,20 +1,23 @@
 //import test from "test.js";
 
-let myp5 = new p5(( sketch ) => {
+let myp5 = new p5(( s ) => {
+ s.setup = () =>{
+   s.createCanvas(700, 300);
+   s.background(133,178,222);
+ }
 
-  
 },
 'domId');
 
 let instance_1 = new p5((p) => {
 
 
-  p.setup = () =>{
+ p.setup = () =>{
    p.createCanvas(200, 100);
    p.background(235,178,222);
 
 
-}
+ }
 
 }, 'domId2');
 
