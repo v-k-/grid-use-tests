@@ -1,13 +1,6 @@
 html,
-body {
+body, div {
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
-
-
-.p5canvas {
-      left: 0;
-      top: 0;
-      position: absolute;
-    }
