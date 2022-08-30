@@ -1,7 +1,7 @@
 const fs = require('fs');
 const raw = fs.readFileSync('words.json');
 let words = JSON.parse(raw);
-// console.log(words);
+console.log(words);
 
 const express = require('express');
 const app = express();
@@ -38,7 +38,7 @@ function addWord(req, res) {
         fs.writeFile('words.json', JSON.stringify(words, null, 2), finished)
 
         function finished(err) {
-            // console.log('writen!');
+            console.log('writen!');
         }
         reply = {
 
@@ -61,5 +61,5 @@ function sendAll(req, res) {
 };
 
 app.listen(port, () => {
-    // console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`)
 })

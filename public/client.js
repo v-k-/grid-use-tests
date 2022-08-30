@@ -27,4 +27,4 @@ let tela = new p5((p) => {
     p.background(235, 178, 222);
   }
 
-}, 'sketch_1');
+}, 'display');
