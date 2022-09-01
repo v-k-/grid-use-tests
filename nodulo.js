@@ -8,8 +8,8 @@ const app = express();
 const port = 20853;
 //const p5 = require ("sketch");
 
-
-
+NODE_ENV=production /home/you/apps/ghost_ze/node_modules/.bin/ghost start -d /home/you/apps/ghost_ze/ghost
+echo "Started Ghost for ghost_ze."
 
 
 app.use(express.static('public'));
