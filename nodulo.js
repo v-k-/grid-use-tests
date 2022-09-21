@@ -1,36 +1,65 @@
-// const http = require('http');
+const fs = require('fs');
+const raw = fs.readFileSync('words.json');
+let words = JSON.parse(raw);
+console.log(words);
 
-// const hostname = '127.0.0.1';
-// const port = 20853;
-
-// const server = http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   res.setHeader('Content-Type', 'text/plain');
-//   res.end('Hello World from Node.js\n');
-// });
-
-// server.listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
-// });
-
-//const o = require('./este.mjs');
 const express = require('express');
 const app = express();
 const port = 20853;
 //const p5 = require ("sketch");
 
+NODE_ENV=production /home/you/apps/ghost_ze/node_modules/.bin/ghost start -d /home/you/apps/ghost_ze/ghost
+echo "Started Ghost for ghost_ze."
+
+
 app.use(express.static('public'));
-app.get('/', (req, res) => {
- // res.send('<h1>PORRRRRHAM</h1>')
-  //res.redirect('test.js');
-
-//console.log('aqui');
-//o.desenho();
 
 
-})
+
+app.get('/add/:word/:score?', addWord)
+
+function addWord(req, res) {
+
+    var data = req.params;
+    var word = data.word;
+    var score = Number(data.score);
+    var reply = "";
+
+    if (!score) {
+        reply = {
+            "word": word,
+            "score": score,
+            "msg": "score is required."
+        }
+        res.send(reply);
+
+    } else {
+        words[word] = score;
+        fs.writeFile('words.json', JSON.stringify(words, null, 2), finished)
+
+        function finished(err) {
+            console.log('writen!');
+        }
+        reply = {
+
+            "word": word,
+            "score": score,
+            "msg": "Thanks! " + word + " added."
+        }
+        res.send(reply);
+    }
+
+
+};
+
+
+
+app.get('/all', sendAll);
+
+function sendAll(req, res) {
+    res.send(words);
+};
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`)
 })
-

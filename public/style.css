@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 html, body {
   height: 100%;
 }
@@ -12,3 +13,11 @@ body {
   /* This centers our sketch vertically. */
   align-items: center;
 }
+=======
+html,
+body, div {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+>>>>>>> 14bf74ab311a3aa2d4135cfc8355493882f8d9b8
