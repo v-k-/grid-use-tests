@@ -23,7 +23,7 @@ class Grid {
         this.base_points = [];
         //points made, those are getting update 
         this.made_points = []
-        //for the abandoned for now column thinking
+            //for the abandoned for now column thinking
         this.w_slices = [];
         this.h_slices = [];
 
@@ -55,7 +55,7 @@ class Grid {
         this.base_points = [p0, p1, p2, p3];
         this.grid_w = this.base_points[1].x - this.base_points[0].x;
         this.grid_h = this.base_points[2].y - this.base_points[0].y;
-        
+
         // the collumns thinking got paused for now
         // this.make_w_slices(this.coll_numb);
         // this.make_h_slices(this.row_numb);
@@ -95,17 +95,17 @@ class Grid {
         // points outside the window won't be of any good...
         // yet to decide how to deal with it
         // an intrusive alert for now;
-        if (x > width || y > height)   {
+        if (x > width || y > height) {
             alert(`the Gpoint (${x}, ${y}) was created outside the window. Useless`)
         }
         // the ratio between point x and y and grid width
-        const rx = (x  / this.grid_w);
-        const ry = (y  / this.grid_h)
+        const rx = x  / width;
+        const ry = y / height;
 
         // pass the singleton grid as a parameter
         //so the points can recalc ratio if animated in main sketch
         const gp = new Gpoint(x, y, rx, ry, this);
-        
+
         //store the point
         this.made_points.push(gp);
         return gp;
@@ -115,8 +115,8 @@ class Grid {
     // recalc points based on stored ratio.
     gp_update() {
         for (const gp of this.made_points) {
-            gp.gx = this.grid_w * gp.ratio_x;
-            gp.gy = this.grid_h * gp.ratio_y;
+            gp.gx = width * gp.ratio_x;
+            gp.gy = height * gp.ratio_y;
 
 
 
@@ -199,9 +199,9 @@ class Grid {
 
 
 
-            //     console.log(`
-            // dx =  ${dx}
-            // dy =  ${dy}  
-            // gx = ${gp.gx}
-            // gy = ${gp.gy}
-            // `)
+//     console.log(`
+// dx =  ${dx}
+// dy =  ${dy}  
+// gx = ${gp.gx}
+// gy = ${gp.gy}
+// `)

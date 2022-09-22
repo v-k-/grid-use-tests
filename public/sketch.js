@@ -34,25 +34,31 @@ function setup() {
 
     // a pvector
     fixed = createVector(width / 2, height / 2);
+    // debug("setup");
 
 }
 
 function draw() {
 
     background(220);
+    // ellipse(pos.gx, pos.gy, 10, 10);
 
     // grid.doodle();
 
     // this point will be at center first, but 
     // will not keep its position relative 
     fill(0);
+    stroke(0);
     ellipse(fixed.x, fixed.y, 10, 10);
+    line(width / 2 - 30, height / 2, width / 2 + 30, height / 2);
+    line(width / 2, height / 2 - 30, width / 2, height / 2 + 30);
 
 
-    // this will always be created at center and adapt accordingly.
+    // this will always be at center 
 
     fill(200, 120, 110, 110);
     ellipse(pos.gx, pos.gy, 100, 100);
+
 
     //a circle path with no Gpoints involved...
     const ex = cos(radians(millis() / 10)) * 130;
@@ -73,11 +79,14 @@ function draw() {
     // this wil be always at center
     rectMode(CENTER);
     rect(grid.center.x, grid.center.y, rd.gx, rd.gy);
+    fill(0, 0, 255);
+    rect(pos.gx, pos.gy, 10, 10);
+    fill(200, 120, 110, 110);
     rectMode(CORNER);
 
 
     // here we use update on the point as we are going ro animate it
-    walk.update((millis() / 5) % width, walk.gy, grid);
+    walk.update((millis() / 5) % width, null);
     rect(walk.gx, walk.gy, 20, 20);
 
     // using base points and props to calc a fixed distance
@@ -119,5 +128,27 @@ function windowResized() {
     // custom html hack
     centerCanvas();
     // grid resize and embeded points updates
+    // debug("before calc");
     grid.calc_grid();
+    // debug("after calc");
+}
+
+
+
+function debug(msg) {
+    console.log(`
+    -${msg}
+    width = ${width}
+    height= ${height}
+    grid_w =${grid.grid_w}
+    grid_h =${grid.grid_h} 
+    width/2 = ${width/2}
+    height/2= ${height/2}
+    grid_cx =${grid.center.x}
+    grid_cy =${grid.center.y} 
+    pos.gx = ${pos.gx}
+    pos.gy = ${pos.gy}
+    ratio_x = ${pos.ratio_x}
+    ratio_x = ${pos.ratio_y}
+    `)
 }
