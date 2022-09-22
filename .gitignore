@@ -108,4 +108,4 @@ dist
 .tern-port
 
 #opal temp folder
-temp
+temp/
