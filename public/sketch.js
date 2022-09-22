@@ -26,7 +26,7 @@ function setup() {
     ponto = grid.make_Gpoint(200, 200);
     pos = grid.make_Gpoint(width / 2, height / 2);
     tpos = grid.make_Gpoint(25, 600);
-    rd = grid.make_Gpoint(323, 323);
+    rd = grid.make_Gpoint(450, 323);
     fixed = createVector(width/2, height/2);
     walk = grid.make_Gpoint(0, 450, this);
     console.log(walk.this);
@@ -57,16 +57,18 @@ function draw() {
     rect(walk.gx, walk.gy, 20,20);
 
     const h = grid.base_points[3].y - grid.base_points[1].y; 
-    const x = grid.base_points[3].x - 85;
+    const x = grid.base_points[3].x - 105;
 
-    rect(x, grid.base_points[1].y, 85, h); 
+    rect(x, grid.base_points[1].y, 8055, h); 
 
    	
+    textSize(20);
     fill(20, 12, 11);
     text('I\'m not', 25, 570);
     fill(200, 120, 110);
     text('I\'m adapting to  window size', tpos.gx, tpos.gy);
     fill(100, 70, 80);
+    textSize(15);
     text('_a menu item?', x, grid.base_points[1].y +  40);
 
 }
