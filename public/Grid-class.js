@@ -112,16 +112,13 @@ class Grid {
         // points outside the window won't be of any good...
         // yet to decide how to deal with it
         // an intrusive alert for now;
-        if (x > width || y > height) {
+        if (x > width || y > height  || x < 0 || y < 0) {
             alert(`the Gpoint (${x}, ${y}) was created outside the window. Useless`)
         }
 
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // the ratio between point x and y and grid width
-        const rx = x / this.grid_w;
-        const ry = y / this.grid_h; 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        const rx = (x - this.left_margin) / this.grid_w;
+        const ry = (y - this.margin_height ) / this.grid_h; 
 
         // pass the singleton grid as a parameter
         //so the points can recalc ratio if animated in main sketch

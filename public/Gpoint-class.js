@@ -19,12 +19,12 @@
 	    //relative position
 	    update(x, y) {
 	        if (x !== null) {
-	            const rx = x / width;
+	            const rx = x / grid.left_margin;
 	            this.ratio_x = rx;
 	            this.gx = this.original_x = x;
 	        }
 	        if (y !== null) {
-	            const ry = y / height;
+	            const ry = y / grid.margin_height;
 	            this.ratio_y = ry;
 	            this.gy = this.original_y = y;
 

@@ -34,7 +34,7 @@ function setup() {
 
     // a pvector
     fixed = createVector(width / 2, height / 2);
-    debug("setup");
+    // debug("setup");
 
 }
 
@@ -128,9 +128,9 @@ function windowResized() {
     // custom html hack
     centerCanvas();
     // grid resize and embeded points updates
-    debug("before calc");
+    // debug("before calc");
     grid.calc_grid();
-    debug("after calc");
+    // debug("after calc");
 }
 
 
