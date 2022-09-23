@@ -115,9 +115,13 @@ class Grid {
         if (x > width || y > height) {
             alert(`the Gpoint (${x}, ${y}) was created outside the window. Useless`)
         }
+
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // the ratio between point x and y and grid width
-        const rx = x / width;
-        const ry = y / height;
+        const rx = x / this.grid_w;
+        const ry = y / this.grid_h; 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         // pass the singleton grid as a parameter
         //so the points can recalc ratio if animated in main sketch
@@ -132,8 +136,8 @@ class Grid {
     // recalc points based on stored ratio.
     gp_update() {
         for (const gp of this.made_points) {
-            gp.gx = width * gp.ratio_x;
-            gp.gy = height * gp.ratio_y;
+            gp.gx = this.grid_w * gp.ratio_x + this.left_margin;
+            gp.gy = this.grid_h * gp.ratio_y + this.margin_height;
 
 
 
