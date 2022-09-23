@@ -22,6 +22,7 @@ function setup() {
 
     //(coll_numb, row_numb, gutt_width, gutt_height, margin_width, margin_height)
     grid = new Grid(12, 3, 10, 20, 20, 30);
+    grid.make_rows(2);
 
     background(220);
 
@@ -43,7 +44,7 @@ function draw() {
     background(220);
     // ellipse(pos.gx, pos.gy, 10, 10);
 
-    // grid.doodle();
+    grid.doodle();
 
     // this point will be at center first, but 
     // will not keep its position relative 
