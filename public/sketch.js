@@ -15,14 +15,19 @@ let ponto, pos, tpos, rd;
 let fixed;
 let walk;
 
+// this.resizeTo(1000,700);
 
 function setup() {
-    cnv = createCanvas(windowWidth, windowHeight);
+
+    cnv = createCanvas(1000, 700);
     centerCanvas();
 
     //(coll_numb, row_numb, gutt_width, gutt_height, margin_width, margin_height)
-    grid = new Grid(12, 3, 10, 20, 20, 30);
+    grid = new Grid(4, 2, 10, 20, 20, 30);
     grid.make_rows(2);
+    // grid.make_panel(0, width/2);
+    grid.make_panels(4);
+
 
     background(220);
 
@@ -35,13 +40,14 @@ function setup() {
 
     // a pvector
     fixed = createVector(width / 2, height / 2);
-    // debug("setup");
+    debug("setup");
 
 }
 
 function draw() {
 
     background(220);
+    grid.panels_draw    ();
     // ellipse(pos.gx, pos.gy, 10, 10);
 
     grid.doodle();
@@ -129,9 +135,9 @@ function windowResized() {
     // custom html hack
     centerCanvas();
     // grid resize and embeded points updates
-    // debug("before calc");
+    debug("before calc");
     grid.calc_grid();
-    // debug("after calc");
+    debug("after calc");
 }
 
 
@@ -151,5 +157,6 @@ function debug(msg) {
     pos.gy = ${pos.gy}
     ratio_x = ${pos.ratio_x}
     ratio_x = ${pos.ratio_y}
-    `)
+    `);
+    console.log(grid.panels);
 }

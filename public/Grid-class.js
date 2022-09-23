@@ -1,22 +1,22 @@
 'use strict';
 class Grid {
     constructor(
-        coll_numb,
-        row_numb,
-        gutt_width,
-        gutt_height,
-        margin_width,
-        margin_height
+        // default to window dimensions
+        col_numb = 1,
+        row_numb = 1,
+        gutt_width = 0,
+        gutt_height = 0,
+        margin_width = 0,
+        margin_height = 0
     ) {
-
-
         // passed by vars
-        this.coll_numb = coll_numb;
+        this.col_numb = col_numb;
         this.row_numb = row_numb;
         this.gutt_width = gutt_width;
         this.gutt_height = gutt_height;
+        // !!changing names!! ... not sure is such a good idea...
         this.left_margin = margin_width;
-        this.margin_height = margin_height;
+        this.top_margin = margin_height;
 
         //instances var
         this.center;
@@ -24,11 +24,17 @@ class Grid {
         this.grid_h;
         //base points are the 4 corners p5Vectors
         this.base_points = [];
-        //points made, those are getting update 
+        //points made hold Gpoints created in main sketch, 
         this.made_points = []
-            //for the abandoned for now column thinking
+
+        //collumns and rows
+        this.col_w;
+        this.row_h;
         this.columns = [];
         this.rows = [];
+
+        // panels
+        this.panels = [];
 
         //calc everything once
         //this populates those vars above like center and points[]
@@ -37,21 +43,25 @@ class Grid {
     }
 
 
-                                                                  // The grid base is like this:
-                                                                  //                        //
- //.............................................................  //  P0                 P1
-                                                                  
-                                                                  //         center
-                                                                  
-                                                                  //  P2                 P3
-                                                                  //                        // 
+    // The grid base is obviously like this:
+
+
+    //                        //
+    //  P0                 P1
+    //                        //
+    //         center
+    //                        //
+    //  P2                 P3
+    //                        // 
+
+
 
     // base calculations relative to window dimensions
     calc_grid() {
         let right_margin = width - this.left_margin;
-        let bottom_margin = height - this.margin_height;
-        const p0 = createVector(this.left_margin, this.margin_height);
-        const p1 = createVector(right_margin, this.margin_height);
+        let bottom_margin = height - this.top_margin;
+        const p0 = createVector(this.left_margin, this.top_margin);
+        const p1 = createVector(right_margin, this.top_margin);
         const p2 = createVector(this.left_margin, bottom_margin);
         const p3 = createVector(right_margin, bottom_margin);
         this.center = createVector(p2.x / 2 + p3.x / 2, p1.y / 2 + p3.y / 2);
@@ -59,41 +69,14 @@ class Grid {
         this.grid_w = this.base_points[1].x - this.base_points[0].x;
         this.grid_h = this.base_points[2].y - this.base_points[0].y;
 
-        // the collumns thinking got paused for now
-        // this.make_w_slices(this.coll_numb);
-        // this.make_rows(this.row_numb);
-
         //update made_points[]
         this.gp_update();
+
+        //make rows and columns
+        this.make_columns(this.col_numb);
         this.make_rows(this.row_numb);
 
     }
-
-    // make collumns and return new collumn width
-    make_w_slices(n) {
-        const coll_width = this.grid_w / n;
-        let acumulator = this.base_points[0].x;
-        for (let i = 0; i < n; i++) {
-            this.columns[i] = createVector(acumulator, this.base_points[0].y);
-            acumulator += coll_width;
-        }
-        return coll_width;
-    }
-
-    // // make rows and return new row width
-    // make_rows(n) {
-    //     this.row_numb = n;
-    //     row_width = this.grid_h / this.row_numb;
-
-    //     let acumulator = this.base_points[0].y;
-
-    //     for (let i = 0; i < this.row_numb; i++) {
-    //         this.rows[i] = createVector(this.base_points[0].x, acumulator);
-    //         acumulator += row_width;
-    //     }
-    //     return row_width;
-    // }
-
 
     // construct a Gpoint, add it to made_points for updates
     make_Gpoint(x = 0, y = 0) {
@@ -101,14 +84,15 @@ class Grid {
         // points outside the window won't be of any good...
         // yet to decide how to deal with it
         // an intrusive alert for now;
-        if (x > width || y > height  || x < 0 || y < 0) {
+        if (x > width || y > height || x < 0 || y < 0) {
             alert(`the Gpoint (${x}, ${y}) was created outside the window. Useless`)
         }
 
         // the ratio between point x and y and grid width
-        const rx = (x - this.left_margin) / this.grid_w;
-        const ry = (y - this.margin_height ) / this.grid_h; 
-
+        let rx = (x - this.left_margin) / this.grid_w;
+        let ry = (y - this.top_margin) / this.grid_h;
+        // rx = rx ===0? 1:rx;
+        // ry = ry ===0? 1:ry;
         // pass the singleton grid as a parameter
         //so the points can recalc ratio if animated in main sketch
         const gp = new Gpoint(x, y, rx, ry, this);
@@ -123,94 +107,185 @@ class Grid {
     gp_update() {
         for (const gp of this.made_points) {
             gp.gx = this.grid_w * gp.ratio_x + this.left_margin;
-            gp.gy = this.grid_h * gp.ratio_y + this.margin_height;
-
-
-
+            gp.gy = this.grid_h * gp.ratio_y + this.top_margin;
         }
     }
 
-    //yet to come
+    //Calc columns, update col_number and col_w, (returns col_width?)
+    make_columns(n) {
+        this.columns = [];
+        const col_width = this.grid_w / n;
+
+        let acumulator = this.base_points[0].x;
+
+        for (let i = 0; i < n; i++) {
+            this.columns[i] = createVector(acumulator, this.base_points[0].y);
+            acumulator += col_width;
+            // console.log ("c = " )
+            // console.log (this.columns);
+        }
+        this.col_numb = n;
+        this.col_w = col_width;
+        return col_width;
+    }
+
+
+    //Calc rows, update row_number and row_h, (returns row_height?)
     make_rows(n) {
-      const row_width = this.grid_h / n;
+        this.rows = [];
+        const row_height = this.grid_h / n;
 
         let acumulator = this.base_points[0].y;
 
         for (let i = 0; i < n; i++) {
             this.rows[i] = createVector(this.base_points[0].x, acumulator);
-            acumulator += row_width;
-            console.log this.rows[i];
+            acumulator += row_height;
+            // console.log (this.rows);
         }
-                this.row_numb = n;
-        return row_width;
+        this.row_numb = n;
+        this.row_h = row_height;
+        return row_height;
+    }
 
+    make_panels() {
+        for (int i = 0; i > this.columns.length; i++) {
+            for (int j = 0; i < this.rows.lenght; j++) {
+              0/0
+                const x =  this.columns[0]x;
+                const y =  this.columns[0]y;
+                let y = top + k * (rowGap);
+            }
+
+        }
     }
 
     // draw ref grid to debug and design
     doodle() {
-        strokeWeight(1);
-        stroke(0);
-        noFill();
+            strokeWeight(1);
+            stroke(0);
+            noFill();
 
-        //lines of margins and diagonals
-        const p0 = this.base_points[0];
-        const p1 = this.base_points[1];
-        const p2 = this.base_points[2];
-        const p3 = this.base_points[3];
+            //lines of margins and diagonals
+            const p0 = this.base_points[0];
+            const p1 = this.base_points[1];
+            const p2 = this.base_points[2];
+            const p3 = this.base_points[3];
 
-        this.pvline(p0, p1);
-        this.pvline(p0, p2);
-        this.pvline(p0, p3);
+            this.pvline(p0, p1);
+            this.pvline(p0, p2);
+            this.pvline(p0, p3);
 
-        this.pvline(p1, p2);
-        this.pvline(p1, p3);
-        this.pvline(p2, p3);
-
-
-        // draw center point
-        ellipse(this.center.x, this.center.y, 7, 7);
+            this.pvline(p1, p2);
+            this.pvline(p1, p3);
+            this.pvline(p2, p3);
 
 
-        // draw base base_points at corners
-        for (const p of this.base_points) {
-            ellipse(p.x, p.y, 7, 7);
+            // draw center point
+            ellipse(this.center.x, this.center.y, 7, 7);
+
+
+            // draw base base_points at corners
+            for (const p of this.base_points) {
+                ellipse(p.x, p.y, 7, 7);
+            }
+
+            // draw base_points along top axis
+            for (const t of this.columns) {
+                ellipse(t.x, t.y, 3, 3);
+            }
+
+            // draw base_points along left axis
+            for (const t of this.rows) {
+                ellipse(t.x, t.y, 3, 3);
+            }
+            // draw base_points along top axis
+            fill(255, 20, 20);
+
+            for (const gp of this.made_points) {
+                // ellipse(gp.gx, gp.gy, 3, 3);
+            }
+
+
+            //draw bg grid 
+            strokeWeight(1);
+            stroke(0, 50);
+            for (let i = 0; i < width; i += 10) {
+                line(i, 0, i, height);
+            }
+
+            for (let i = 0; i < height; i += 10) {
+                line(0, i, width, i);
+            }
+
         }
-
-        // draw base_points along top axis
-        for (const t of this.columns) {
-            ellipse(t.x, t.y, 3, 3);
-        }
-
-        // draw base_points along left axis
-        for (const t of this.rows) {
-            ellipse(t.x, t.y, 3, 3);
-        }
-        // draw base_points along top axis
-        fill(255, 20, 20);
-
-        for (const gp of this.made_points) {
-            // ellipse(gp.gx, gp.gy, 3, 3);
-        }
-
-
-        //draw bg grid 
-        strokeWeight(1);
-        stroke(0, 50);
-        for (let i = 0; i < width; i += 10) {
-            line(i, 0, i, height);
-        }
-
-        for (let i = 0; i < height; i += 10) {
-            line(0, i, width, i);
-        }
-
-    }
-
-    //utility to unpack a p5Vector
+        //utility to unpack a p5Vector
     pvline(pv1, pv2) {
         line(pv1.x, pv1.y, pv2.x, pv2.y);
     }
 
+
+
+
+    _make_panel(row, wd) {
+        const x = this.rows[row].x;
+        const y = this.rows[row].y;
+        const w = wd;
+        const h = this.rows[row].y + this.row_h;
+        const gp = this.make_Gpoint(x, y);
+        const p = new Panel(gp, w, h);
+        this.made_points.push(gp);
+        this.panels.push(p);
+        return p
+    }
+
+    // make_panels(n) {
+
+    //     for (let i = 0; i < n; i++) {
+    //         const gpos = this.make_Gpoint(col[i].x, col[i].y);
+
+    //         const panel = new Panel(gpos, gdim);
+    //         this.panels.push(panel);
+    //         if (i === 0) {
+    //             return
+    //         } else {
+    //            const prev = new Gpoint(gpos.x, gpos.y);
+    //         }
+
+    //          acumulator += w;
+
+    //     }
+    //     console.log(this.panels);
+
+    //     return this.panels
+    // }
+
+    make_panels(n) {
+
+        const y = this.rows[0].y;
+        const w = this.grid_w / n;
+        const h = this.rows.length > 0 ? this.row_h : this.grid_h;
+
+        const gdim = this.make_Gpoint(w, h)
+
+        let acumulator = this.base_points[0].x;
+        for (let i = 0; i < n; i++) {
+            const gpos = this.make_Gpoint(acumulator, y);
+
+            const panel = new Panel(gpos, gdim);
+            this.panels.push(panel);
+            acumulator += w;
+
+        }
+        console.log(this.panels);
+
+        return this.panels
+    }
+
+    panels_draw() {
+        for (const p of this.panels) {
+            p.doddle_panel();
+        }
+    }
 
 
 

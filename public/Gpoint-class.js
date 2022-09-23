@@ -1,13 +1,13 @@
 	// not to be directly instantiade
 	// use make_Gpoint from Grid.
 	class Gpoint {
-	    constructor(x, y, ratio_x, ratio_y, label, grid) {
+	    constructor(x, y, ratio_x, ratio_y, grid) {
 	        //storing: original points  label is not being used for now
 	        this.original_x = x;
 	        this.original_y = y;
 	        this.gx = x;
 	        this.gy = y;
-	        this.label = label;
+	        // this.label = label;
 	        this.ratio_x = ratio_x;
 	        this.ratio_y = ratio_y;
 	        this.grid = grid;
