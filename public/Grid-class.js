@@ -8,6 +8,23 @@ class Grid {
         margin_width,
         margin_height
     ) {
+
+        // calc initial ratio based on margin width and window
+        const ini_ratio = createVector();
+        if (margin_width === 0) {
+            ini_ratio.x = 1;
+            return;
+        } else {
+            ini_ratio.x = margin_width / width;
+        }
+
+        if (margin_height === 0) {
+            ini_ratio.y = 1;
+            return
+        } else {
+            ini_ratio.y = margin_height / height;
+        }
+
         // passed by vars
         this.coll_numb = coll_numb;
         this.row_numb = row_numb;
@@ -99,7 +116,7 @@ class Grid {
             alert(`the Gpoint (${x}, ${y}) was created outside the window. Useless`)
         }
         // the ratio between point x and y and grid width
-        const rx = x  / width;
+        const rx = x / width;
         const ry = y / height;
 
         // pass the singleton grid as a parameter
