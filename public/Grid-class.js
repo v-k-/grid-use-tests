@@ -73,8 +73,9 @@ class Grid {
         this.gp_update();
 
         //make rows and columns
-        this.make_columns(this.col_numb);
-        this.make_rows(this.row_numb);
+        // this.make_columns(this.col_numb);
+        // this.make_rows(this.row_numb);
+        this.make_panels();
 
     }
 
@@ -111,53 +112,86 @@ class Grid {
         }
     }
 
-    //Calc columns, update col_number and col_w, (returns col_width?)
-    make_columns(n) {
-        this.columns = [];
-        const col_width = this.grid_w / n;
+    // //Calc columns, update col_number and col_w, (returns col_width?)
+    // make_columns(n) {
+    //     this.columns = [];
+    //     const col_width = this.grid_w / n;
 
-        let acumulator = this.base_points[0].x;
+    //     let acumulator = this.base_points[0].x;
 
-        for (let i = 0; i < n; i++) {
-            this.columns[i] = createVector(acumulator, this.base_points[0].y);
-            acumulator += col_width;
-            // console.log ("c = " )
-            // console.log (this.columns);
-        }
-        this.col_numb = n;
-        this.col_w = col_width;
-        return col_width;
-    }
+    //     for (let i = 0; i < n; i++) {
+    //         this.columns[i] = createVector(acumulator, this.base_points[0].y);
+    //         acumulator += col_width;
+    //         // console.log ("c = " )
+    //         // console.log (this.columns);
+    //     }
+    //     this.col_numb = n;
+    //     this.col_w = col_width;
+    //     return col_width;
+    // }
 
 
-    //Calc rows, update row_number and row_h, (returns row_height?)
-    make_rows(n) {
-        this.rows = [];
-        const row_height = this.grid_h / n;
+    // //Calc rows, update row_number and row_h, (returns row_height?)
+    // make_rows(n) {
+    //     this.rows = [];
+    //     const row_height = this.grid_h / n;
 
-        let acumulator = this.base_points[0].y;
+    //     let acumulator = this.base_points[0].y;
 
-        for (let i = 0; i < n; i++) {
-            this.rows[i] = createVector(this.base_points[0].x, acumulator);
-            acumulator += row_height;
-            // console.log (this.rows);
-        }
-        this.row_numb = n;
-        this.row_h = row_height;
-        return row_height;
-    }
+    //     for (let i = 0; i < n; i++) {
+    //         this.rows[i] = createVector(this.base_points[0].x, acumulator);
+    //         acumulator += row_height;
+    //         // console.log (this.rows);
+    //     }
+    //     this.row_numb = n;
+    //     this.row_h = row_height;
+    //     return row_height;
+    // }
 
     make_panels() {
-        for (int i = 0; i > this.columns.length; i++) {
-            for (int j = 0; i < this.rows.lenght; j++) {
-              0/0
-                const x =  this.columns[0]x;
-                const y =  this.columns[0]y;
-                let y = top + k * (rowGap);
-            }
+        this.panels = [];
+        let temp_points = new Map();;
+        // this.rows = [];
 
+        const col_width = this.grid_w / this.col_numb;
+        const row_height = this.grid_h / this.row_numb;
+
+
+        for (let i = 0; i <= this.col_numb; i++) {
+            for (let j = 0; j <= this.row_numb; j++) {
+
+                const x = i * col_width + this.left_margin;
+                const y = j * row_height + this.top_margin;
+                ellipse(x, y, 14);
+                // ellipse(i * col_width + this.left_margin, j * row_height + this.margin_height, 10, 10);
+
+                temp_points.set(`${i}${j}`, this.make_Gpoint(x, y));
+                text(`${i}, ${j}`, x - 8, y + 24);
+
+            }
+        }
+        const numb = this.col_numb * this.row_numb;
+
+        for (let i = 0; i < this.col_numb; i++) {
+            for (let j = 0; j < this.row_numb; j++) {
+
+                const panel = new Panel(
+                    temp_points.get(`${i}${j}`),
+                    temp_points.get(`${i+1}${j+1}`),
+                    this.panels.length.toString(),
+                    this);
+                this.panels.push(panel);
+            }
+        }
+        for (const panel of this.panels) {
+            line(panel.p0.gx, panel.p0.gy, panel.p3.gx, panel.p3.gy);
+            text("panel.label", panel.p0.gx, panel.p3.gx);
         }
     }
+
+
+
+
 
     // draw ref grid to debug and design
     doodle() {
@@ -217,6 +251,8 @@ class Grid {
                 line(0, i, width, i);
             }
 
+            this.panels_draw();
+
         }
         //utility to unpack a p5Vector
     pvline(pv1, pv2) {
@@ -259,27 +295,27 @@ class Grid {
     //     return this.panels
     // }
 
-    make_panels(n) {
+    // make_panels(n) {
 
-        const y = this.rows[0].y;
-        const w = this.grid_w / n;
-        const h = this.rows.length > 0 ? this.row_h : this.grid_h;
+    //     const y = this.rows[0].y;
+    //     const w = this.grid_w / n;
+    //     const h = this.rows.length > 0 ? this.row_h : this.grid_h;
 
-        const gdim = this.make_Gpoint(w, h)
+    //     const gdim = this.make_Gpoint(w, h)
 
-        let acumulator = this.base_points[0].x;
-        for (let i = 0; i < n; i++) {
-            const gpos = this.make_Gpoint(acumulator, y);
+    //     let acumulator = this.base_points[0].x;
+    //     for (let i = 0; i < n; i++) {
+    //         const gpos = this.make_Gpoint(acumulator, y);
 
-            const panel = new Panel(gpos, gdim);
-            this.panels.push(panel);
-            acumulator += w;
+    //         const panel = new Panel(gpos, gdim);
+    //         this.panels.push(panel);
+    //         acumulator += w;
 
-        }
-        console.log(this.panels);
+    //     }
+    //     console.log(this.panels);
 
-        return this.panels
-    }
+    //     return this.panels
+    // }
 
     panels_draw() {
         for (const p of this.panels) {

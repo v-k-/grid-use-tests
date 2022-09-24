@@ -19,14 +19,15 @@ let walk;
 
 function setup() {
 
-    cnv = createCanvas(1000, 700);
+    // cnv = createCanvas(1000, 700);
+    cnv = createCanvas(windowWidth, windowHeight);
     centerCanvas();
 
     //(coll_numb, row_numb, gutt_width, gutt_height, margin_width, margin_height)
-    grid = new Grid(4, 2, 10, 20, 20, 30);
-    grid.make_rows(2);
+    grid = new Grid(2, 2, 10, 20, 20, 30);
+    // grid.make_rows(2);
     // grid.make_panel(0, width/2);
-    grid.make_panels(4);
+    grid.make_panels();
 
 
     background(220);
@@ -47,8 +48,9 @@ function setup() {
 function draw() {
 
     background(220);
-    grid.panels_draw    ();
+    grid.panels_draw();
     // ellipse(pos.gx, pos.gy, 10, 10);
+    grid.make_panels();
 
     grid.doodle();
 
