@@ -7,7 +7,9 @@ class Grid {
         gutt_width = 0,
         gutt_height = 0,
         margin_width = 0,
-        margin_height = 0
+        margin_height = 0,
+        base_w = width,
+        base_h = height
     ) {
         // passed by vars
         this.col_numb = col_numb;
@@ -38,7 +40,7 @@ class Grid {
 
         //calc everything once
         //this populates those vars above like center and points[]
-        this.calc_grid();
+        //this.calc_grid();
 
     }
 
@@ -92,8 +94,7 @@ class Grid {
         // the ratio between point x and y and grid width
         let rx = (x - this.left_margin) / this.grid_w;
         let ry = (y - this.top_margin) / this.grid_h;
-        // rx = rx ===0? 1:rx;
-        // ry = ry ===0? 1:ry;
+        
         // pass the singleton grid as a parameter
         //so the points can recalc ratio if animated in main sketch
         const gp = new Gpoint(x, y, rx, ry, this);
@@ -112,80 +113,51 @@ class Grid {
         }
     }
 
-    // //Calc columns, update col_number and col_w, (returns col_width?)
-    // make_columns(n) {
-    //     this.columns = [];
-    //     const col_width = this.grid_w / n;
 
-    //     let acumulator = this.base_points[0].x;
-
-    //     for (let i = 0; i < n; i++) {
-    //         this.columns[i] = createVector(acumulator, this.base_points[0].y);
-    //         acumulator += col_width;
-    //         // console.log ("c = " )
-    //         // console.log (this.columns);
-    //     }
-    //     this.col_numb = n;
-    //     this.col_w = col_width;
-    //     return col_width;
-    // }
-
-
-    // //Calc rows, update row_number and row_h, (returns row_height?)
-    // make_rows(n) {
-    //     this.rows = [];
-    //     const row_height = this.grid_h / n;
-
-    //     let acumulator = this.base_points[0].y;
-
-    //     for (let i = 0; i < n; i++) {
-    //         this.rows[i] = createVector(this.base_points[0].x, acumulator);
-    //         acumulator += row_height;
-    //         // console.log (this.rows);
-    //     }
-    //     this.row_numb = n;
-    //     this.row_h = row_height;
-    //     return row_height;
-    // }
-
+    //calc intersections points, col and row w and h - save the to an array so they can be accessed
+    //in diff order
     make_panels() {
+        //clear the array
         this.panels = [];
-        let temp_points = new Map();;
-        // this.rows = [];
 
+        // a map to associate labels
+        let temp_points = new Map();;
+
+        // w and h calc
         const col_width = this.grid_w / this.col_numb;
         const row_height = this.grid_h / this.row_numb;
 
-
+        // 2d loop 1d array
         for (let i = 0; i <= this.col_numb; i++) {
             for (let j = 0; j <= this.row_numb; j++) {
 
+                //guuters ?? 
                 const x = i * col_width + this.left_margin;
                 const y = j * row_height + this.top_margin;
-                ellipse(x, y, 14);
-                // ellipse(i * col_width + this.left_margin, j * row_height + this.margin_height, 10, 10);
 
+                //insert  Gpoint and label
                 temp_points.set(`${i}${j}`, this.make_Gpoint(x, y));
-                text(`${i}, ${j}`, x - 8, y + 24);
-
             }
         }
-        const numb = this.col_numb * this.row_numb;
 
+        // number of panels to create
+        const numb = this.col_numb * this.row_numb;
+        
+        // again 2d loop 1d array
         for (let i = 0; i < this.col_numb; i++) {
             for (let j = 0; j < this.row_numb; j++) {
 
+                const l = `[${this.panels.length.toString()}] [${i},${j}] [${i+1}${j+1}]`;
+
+                //make a new panel using:
                 const panel = new Panel(
-                    temp_points.get(`${i}${j}`),
-                    temp_points.get(`${i+1}${j+1}`),
-                    this.panels.length.toString(),
-                    this);
+                    temp_points.get(`${i}${j}`),      //get the diagonal point [0,0] 
+                    temp_points.get(`${i+1}${j+1}`),  //and point [1,1]
+                    l,this);                          // [0] [0,0] [1,1];
+
+                //push into grod's array;
                 this.panels.push(panel);
             }
-        }
-        for (const panel of this.panels) {
-            line(panel.p0.gx, panel.p0.gy, panel.p3.gx, panel.p3.gy);
-            text("panel.label", panel.p0.gx, panel.p3.gx);
         }
     }
 
