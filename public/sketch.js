@@ -27,7 +27,7 @@ function setup() {
 
 
     //(coll_numb, row_numb, gutt_width, gutt_height, margin_width, margin_height)
-    grid = new Grid(3, 4, 10, 20, 20, 30);
+    grid = new Grid(6, 3, 10, 20, 20, 30);
     grid.calc_grid();
     // grid.make_rows(2);
     // grid.make_panel(0, width/2);
@@ -138,15 +138,16 @@ pop()
 
 
     for (const p of grid.panels) {
-
-        const ex = sin(radians(millis() / 10)) * 50;
-        const ey = cos(radians(millis() / 10)) * 50;
+        
+        const ex = sin(radians(millis() / (p.random*30))) * 50;
+        const ey = cos(radians(millis() / (p.random*30))) * 50;
 
         // But used referenced to a Gpoint
         // so the path will adapt to Window resizes
         // only position, not magnitude
         rect(p.center.gx + ex, p.center.gy + ey, 10, 10);
         ellipse(p.center.gx, p.center.gy, 45, 45);
+        line(p.center.gx, p.center.gy, p.center.gx + ex, p.center.gy + ey, );
     }
     pop();
 

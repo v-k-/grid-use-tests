@@ -14,6 +14,7 @@ class Panel {
         // this.panel_grid =  new Grid(3,4,0,0,0,0,this.panel_w, this.panel_h);
         // this.panel_grid.calc_grid();	
         this.center = this.parentGrid.make_Gpoint(this.p0.gx + this.panel_dim.gx / 2, this.p0.gy + this.panel_dim.gy / 2);
+        this.random = random(0,1);
 
     }
 
