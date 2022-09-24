@@ -14,6 +14,8 @@ function centerCanvas() {
 let ponto, pos, tpos, rd;
 let fixed;
 let walk;
+let panels = [];
+let p3;
 
 // this.resizeTo(1000,700);
 
@@ -23,12 +25,14 @@ function setup() {
     cnv = createCanvas(windowWidth, windowHeight);
     centerCanvas();
 
+
     //(coll_numb, row_numb, gutt_width, gutt_height, margin_width, margin_height)
-    grid = new Grid(2, 2, 10, 20, 20, 30);
+    grid = new Grid(3, 4, 10, 20, 20, 30);
     grid.calc_grid();
     // grid.make_rows(2);
     // grid.make_panel(0, width/2);
-    grid.make_panels();
+    // grid.make_panels();
+        panels = grid.panels;
 
 
     background(220);
@@ -42,7 +46,11 @@ function setup() {
 
     // a pvector
     fixed = createVector(width / 2, height / 2);
-    debug("setup");
+    // debug("setup");
+
+    p3 = panels[3];
+    // console.log(p3);
+
 
 }
 
@@ -50,7 +58,8 @@ function draw() {
 
     background(220);
     // ellipse(pos.gx, pos.gy, 10, 10);
-    grid.doodle();
+    // grid.doodle();
+    grid.panels_draw();
 
     // this point will be at center first, but 
     // will not keep its position relative 
@@ -76,7 +85,8 @@ function draw() {
     // only position, not magnitude
     ellipse(pos.gx + ex, pos.gy + ey, 10, 10);
 
-
+    push();
+    fill(200, 120, 110, 50);
     // rect with pos fixed and width and height relatives
     // to window size, rd for rect dimensions
     rect(10, 10, rd.gx, rd.gy);
@@ -89,8 +99,8 @@ function draw() {
     fill(0, 0, 255);
     rect(pos.gx, pos.gy, 10, 10);
     fill(200, 120, 110, 110);
-    rectMode(CORNER);
-
+    // rectMode(CORNER);
+pop()
 
     // here we use update on the point as we are going ro animate it
     walk.update((millis() / 5) % width, null);
@@ -104,7 +114,7 @@ function draw() {
     //this rect will have always same width
     // and adapt to window size
     // possible a menu bar
-    rect(x, grid.base_points[1].y,  105 , h);
+    rect(x, grid.base_points[1].y, 105, h);
 
 
     // some text
@@ -122,7 +132,32 @@ function draw() {
     textSize(15);
     text('_a menu item?', x, grid.base_points[1].y + 40);
 
-}
+    push()
+    fill(200, 120, 110, 90);
+
+
+    for (const p of grid.panels) {
+
+        const ex = sin(radians(millis() / 10)) * 50;
+        const ey = cos(radians(millis() / 10)) * 50;
+
+        // But used referenced to a Gpoint
+        // so the path will adapt to Window resizes
+        // only position, not magnitude
+        rect(p.center.gx + ex, p.center.gy + ey, 10, 10);
+        ellipse(p.center.gx, p.center.gy, 45, 45);
+    }
+    pop();
+
+    push()
+    fill(250, 30, 250,25);
+    rect(p3.p0.gx, p3.p0.gy, p3.panel_dim.gx, p3.panel_dim.gy)
+    fill(150, 10, 150,25)
+    text(p3.label, p3.center.gx - textWidth(p3.label)/2, p3.center.gy +15);
+    pop();
+
+
+}   
 
 function mousePressed() {
 
@@ -135,9 +170,9 @@ function windowResized() {
     // custom html hack
     centerCanvas();
     // grid resize and embeded points updates
-    debug("before calc");
+    // debug("before calc");
     grid.calc_grid();
-    debug("after calc");
+    // debug("after calc");
 }
 
 

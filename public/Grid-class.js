@@ -79,6 +79,8 @@ class Grid {
         // this.make_rows(this.row_numb);
         this.make_panels();
 
+        // this.panels_update();
+
     }
 
     // construct a Gpoint, add it to made_points for updates
@@ -94,7 +96,7 @@ class Grid {
         // the ratio between point x and y and grid width
         let rx = (x - this.left_margin) / this.grid_w;
         let ry = (y - this.top_margin) / this.grid_h;
-        
+
         // pass the singleton grid as a parameter
         //so the points can recalc ratio if animated in main sketch
         const gp = new Gpoint(x, y, rx, ry, this);
@@ -113,6 +115,12 @@ class Grid {
         }
     }
 
+    panels_update() {
+        for (const p of this.panels) {
+            p.update();
+        }
+    }
+
 
     //calc intersections points, col and row w and h - save the to an array so they can be accessed
     //in diff order
@@ -128,12 +136,12 @@ class Grid {
         const row_height = this.grid_h / this.row_numb;
 
         // 2d loop 1d array
-        for (let i = 0; i <= this.col_numb; i++) {
-            for (let j = 0; j <= this.row_numb; j++) {
+        for (let i = 0; i <= this.row_numb; i++) {
+            for (let j = 0; j <= this.col_numb; j++) {
 
                 //guuters ?? 
-                const x = i * col_width + this.left_margin;
-                const y = j * row_height + this.top_margin;
+                const x = j * col_width + this.left_margin;
+                const y = i * row_height + this.top_margin;
 
                 //insert  Gpoint and label
                 temp_points.set(`${i}${j}`, this.make_Gpoint(x, y));
@@ -142,18 +150,18 @@ class Grid {
 
         // number of panels to create
         const numb = this.col_numb * this.row_numb;
-        
-        // again 2d loop 1d array
-        for (let i = 0; i < this.col_numb; i++) {
-            for (let j = 0; j < this.row_numb; j++) {
 
-                const l = `[${this.panels.length.toString()}] [${i},${j}] [${i+1}${j+1}]`;
+        // again 2d loop 1d array
+        for (let i = 0; i < this.row_numb; i++) {
+            for (let j = 0; j < this.col_numb; j++) {
+
+                const l = `[${this.panels.length.toString()}] [${i},${j}] [${i+1},${j+1}]`;
 
                 //make a new panel using:
                 const panel = new Panel(
-                    temp_points.get(`${i}${j}`),      //get the diagonal point [0,0] 
-                    temp_points.get(`${i+1}${j+1}`),  //and point [1,1]
-                    l,this);                          // [0] [0,0] [1,1];
+                    temp_points.get(`${i}${j}`), //get the diagonal point [0,0] 
+                    temp_points.get(`${i+1}${j+1}`), //and point [1,1]
+                    l, this); // [0] [0,0] [1,1];
 
                 //push into grod's array;
                 this.panels.push(panel);
@@ -291,7 +299,7 @@ class Grid {
 
     panels_draw() {
         for (const p of this.panels) {
-            p.doddle_panel();
+            p.doodle_panel();
         }
     }
 
