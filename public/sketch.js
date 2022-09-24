@@ -58,8 +58,9 @@ function draw() {
 
     background(220);
     // ellipse(pos.gx, pos.gy, 10, 10);
-    // grid.doodle();
-    grid.panels_draw();
+    if (keyIsPressed){
+    grid.doodle();
+    grid.panels_draw();}
 
     // this point will be at center first, but 
     // will not keep its position relative 
