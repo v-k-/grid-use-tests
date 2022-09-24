@@ -27,12 +27,14 @@ function setup() {
 
 
     //(coll_numb, row_numb, gutt_width, gutt_height, margin_width, margin_height)
-    grid = new Grid(6, 3, 10, 20, 20, 30);
+    const c = int(random(1, 12));
+    const r = int(random(1, 12));
+    grid = new Grid(c, r, 10, 20, 20, 30);
     grid.calc_grid();
     // grid.make_rows(2);
     // grid.make_panel(0, width/2);
     // grid.make_panels();
-        panels = grid.panels;
+    panels = grid.panels;
 
 
     background(220);
@@ -58,9 +60,10 @@ function draw() {
 
     background(220);
     // ellipse(pos.gx, pos.gy, 10, 10);
-    if (keyIsPressed){
-    grid.doodle();
-    grid.panels_draw();}
+    if (keyIsPressed) {
+        grid.doodle();
+        grid.panels_draw();
+    }
 
     // this point will be at center first, but 
     // will not keep its position relative 
@@ -101,7 +104,7 @@ function draw() {
     rect(pos.gx, pos.gy, 10, 10);
     fill(200, 120, 110, 110);
     // rectMode(CORNER);
-pop()
+    pop()
 
     // here we use update on the point as we are going ro animate it
     walk.update((millis() / 5) % width, null);
@@ -138,9 +141,9 @@ pop()
 
 
     for (const p of grid.panels) {
-        
-        const ex = sin(radians(millis() / (p.random*30))) * 50;
-        const ey = cos(radians(millis() / (p.random*30))) * 50;
+
+        const ex = sin(radians(millis() / (p.random * 30))) * 50;
+        const ey = cos(radians(millis() / (p.random * 30))) * 50;
 
         // But used referenced to a Gpoint
         // so the path will adapt to Window resizes
@@ -152,14 +155,16 @@ pop()
     pop();
 
     push()
-    fill(250, 30, 250,25);
-    rect(p3.p0.gx, p3.p0.gy, p3.panel_dim.gx, p3.panel_dim.gy)
-    fill(150, 10, 150,25)
-    text(p3.label, p3.center.gx - textWidth(p3.label)/2, p3.center.gy +15);
+    if (p3 !== undefined) {
+        fill(250, 30, 250, 25);
+        rect(p3.p0.gx, p3.p0.gy, p3.panel_dim.gx, p3.panel_dim.gy)
+        fill(150, 10, 150, 25)
+        text(p3.label, p3.center.gx - textWidth(p3.label) / 2, p3.center.gy + 15);
+    }
     pop();
 
 
-}   
+}
 
 function mousePressed() {
 
