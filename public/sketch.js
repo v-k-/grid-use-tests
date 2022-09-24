@@ -1,7 +1,7 @@
 'use strict';
 //The singleton instance
 let grid;
-
+//cloned?
 let cnv;
 //DOM: centering canvas on screen 
 function centerCanvas() {
